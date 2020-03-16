@@ -1,0 +1,15 @@
+<mat-toolbar color="primary" class="menu-toolbar">  
+  <mat-toolbar-row class="container">
+	<span class="logo-icon" aria-label="Angular icon" [inlineSVG]="'assets/svg/angular.svg'"></span>
+	<a href="#" [routerLink]="['']"><span>{{ title }}</span></a>
+	<span class="fill-remaining-space"></span>
+	<button mat-raised-button [routerLink]="['/about']">About</button>
+	<button mat-icon-button [matMenuTriggerFor]="settingMenu" class="menu-setting">
+	  <mat-icon>more_vert</mat-icon>
+	</button>
+    <mat-menu #settingMenu="matMenu" xPosition="before">
+	  <button mat-menu-item>login</button>
+	  <button mat-menu-item>register</button>
+	</mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
