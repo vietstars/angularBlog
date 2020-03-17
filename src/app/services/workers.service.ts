@@ -22,4 +22,8 @@ export class WorkersService {
   getWorkers(sort,filter,total,offset,page):Observable<worker[]> {
   	return this.http.post<worker[]>(`${this.baseUrl}workers`,{sort,filter,total,offset,page});
   }
+
+  addWorker(data):Observable<worker> {
+    return this.http.post<worker>(`${this.baseUrl}worker/add`,{data});
+  }
 }

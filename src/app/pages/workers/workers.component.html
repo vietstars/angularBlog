@@ -21,45 +21,126 @@
 	  	<input matInput (change)="applyFilter($event)" placeholder="Enter filter name and subname">
 	</mat-form-field>
 
-	<table class="mat-table-data" mat-table [dataSource]="sortedData" multiTemplateDataRows restApi="dev.vn/api/employees" totalCount="all" pageSize="5" pageSizeOptions="5,10,15,25,50,100" matSort (matSortChange)="sortData($event)">
+	<table class="mat-table-data table-bordered table-hover" mat-table [dataSource]="sortedData" multiTemplateDataRows restApi="dev.vn/api/employees" totalCount="all" pageSize="5" pageSizeOptions="5,10,15,25,50,100" matSort (matSortChange)="sortData($event)">
 
 		<ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
-		    <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="isSortingDisabled(column)">
-		    	<mat-checkbox *ngIf="column == 'id'" class="check-all" (change)="$event ? masterToggle() : null"
-			    	[checked]="selection.hasValue() && isAllSelected()"
-			    	[indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
-			    {{ column!='id'?column.replace('_',' '):null }} 
-			</th>
+			<ng-container *ngIf="column =='id'">
+			    <th mat-header-cell *matHeaderCellDef >
+			    	<mat-checkbox class="check-all" (change)="$event ? masterToggle() : null"
+				    	[checked]="selection.hasValue() && isAllSelected()"
+				    	[indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+				</th>
+			</ng-container>
+			<ng-container *ngIf="column == 'name'">
+			    <th mat-header-cell *matHeaderCellDef class="px-3">				    
+					<button mat-icon-button disabled>
+						Name
+					</button>
+				</th>
+			</ng-container>
+			<ng-container *ngIf="column !='hire_at'&&column!='id'&&column!='name'">
+			    <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="isSortingDisabled(column)" class="px-3">
+				    {{ column!='id'?column.capitalize():null }} 
+				</th>
+			</ng-container>
+			<ng-container *ngIf="column == 'hire_at'">
+			    <th mat-header-cell *matHeaderCellDef  class="px-3">				    
+					<button mat-icon-button disabled>
+						Hire at
+					</button>
+					<button mat-icon-button class="float-right none-outline" (click)="toggleClass()">
+					  	<mat-icon>person_add</mat-icon>
+					</button>
+				</th>
+			</ng-container>
 		    <td mat-cell *matCellDef="let row"> 
 		    	<mat-checkbox *ngIf="column == 'id'" (click)="$event.stopPropagation()"
 			    	(change)="$event ? selection.toggle(row) : null"
 			    	[checked]="selection.isSelected(row)"
                     [aria-label]="checkboxLabel(row)">
                 </mat-checkbox>
-			    {{ column!='id'?(column=='name'?(row.name+' '+row.subname):row[column]):null }} 
+                <span *ngIf="column != 'id'" class="px-3">
+			    	{{ column=='name'?(row.name+' '+row.subname):row[column] }} 
+                </span>
 			</td>
 	  	</ng-container>
-	
+	  	<ng-container matColumnDef="newWorker">
+		    <th mat-header-cell [attr.colspan]="colSpan" *matHeaderCellDef class="pt-3"> 
+			    <div class="row">
+			    	<div class="col-1 pr-0">
+			    		<mat-form-field class="width-100">
+				    		<mat-label>Name</mat-label>
+		  					<input matInput placeholder="Enter name" [(ngModel)]="newWorker.name">
+			    		</mat-form-field>
+			    	</div>
+			    	<div class="col-2 pr-0">
+			    		<mat-form-field class="width-100">
+				    		<mat-label>Subname</mat-label>
+		  					<input matInput placeholder="Enter subname" [(ngModel)]="newWorker.subname">
+			    		</mat-form-field>
+			    	</div>
+			    	<div class="col-2 pr-0">
+			    		<mat-form-field class="width-100">
+				    		<mat-label>Email</mat-label>
+		  					<input matInput placeholder="Enter email" [(ngModel)]="newWorker.email">
+			    		</mat-form-field>
+			    	</div>
+			    	<div class="col-2 pr-0">
+			    		<mat-form-field class="width-100">
+				    		<mat-label>Mobile</mat-label>
+		  					<input matInput placeholder="Enter mobile" [(ngModel)]="newWorker.mobile">
+			    		</mat-form-field>
+			    	</div>
+			    	<div class="col-1 pr-0">
+			    		<mat-form-field class="width-100">
+			    			<mat-label>Department</mat-label>
+						  	<mat-select [(ngModel)]="newWorker.department">
+							    <mat-option *ngFor="let department of departments | keyvalue" [value]="department.key">
+							      	{{ department.value }}
+							    </mat-option>
+						  	</mat-select>
+						</mat-form-field>
+			    	</div>
+			    	<div class="col-1 pr-0">
+			    		<mat-form-field class="width-100">
+			    			<mat-label>Gender</mat-label>
+						  	<mat-select [(ngModel)]="newWorker.gender">
+							    <mat-option *ngFor="let gender of genders | keyvalue" [value]="gender.key">
+							      	{{ gender.value }}
+							    </mat-option>
+						  	</mat-select>
+						</mat-form-field>
+			    	</div>
+			    	<div class="col-2 pr-0">
+			    		<mat-form-field class="width-100">
+				    		<mat-label>Hire at</mat-label>
+		  					<input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="newWorker.hire_at">
+		  					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  							<mat-datepicker touchUi #picker></mat-datepicker>
+			    		</mat-form-field>
+			    	</div>
+			    	<div class="col-1">
+			    		<button mat-stroked-button class="btn-outline-primary" (click)="addWorker()"><mat-icon>send</mat-icon></button>
+			    	</div>
+			    </div>
+			</th>
+	  	</ng-container>
 		<ng-container matColumnDef="expandedDetail">
 		    <td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length">
-		      	<div class="example-element-detail" [@detailExpand]="row == expandedElement ? 'expanded' : 'collapsed'"
-		      	[innerHTML]="(row.blog_title!=null?row.blog_title:'<h1>Data is not availbility now</h1>')+'<br/>'+(row.blog_content!=null?row.blog_content:'')">
+		      	<div class="element-detail" [@detailExpand]="row == expandedElement ? 'expanded' : 'collapsed'"
+		      	[innerHTML]="(row.blog_title!=null?row.blog_title:'<h1 class=\'text-center pt-3\'>Data is not availbility now</h1>')+'<br/>'+(row.blog_content!=null?row.blog_content:'')">
 		     	</div>
 		    </td>
 	  	</ng-container>
-
 	  	<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  		<tr mat-header-row *matHeaderRowDef="['newWorker']" [ngClass]="newWorkerActive" class="new-worker"></tr>
   		<tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="setClass(row)"
-  		[class.example-expanded-row]="expandedElement === row"
+  		[class.expanded-row]="expandedElement === row"
   		(click)="expandedElement = expandedElement === row ? null : ( row.status==1?null:row )"></tr>
-  		<tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  		<tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
 	</table>
 
 	<div class="paginator-footer">
-		<div *ngIf="pageEvent" class="paginator-event">
-		  Page Change Event Properties | List length: {{pageEvent.length}} | Page size: {{pageEvent.pageSize}}
-		  | Page index: {{pageEvent.pageIndex}}
-		</div>
 		<mat-paginator [length]="length" [pageSize]="pageSize"
 		    [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
 		</mat-paginator>

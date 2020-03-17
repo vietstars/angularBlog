@@ -5,7 +5,7 @@ import { WorkerComponent } from './pages/workers/worker/worker.component';
 
 const routes: Routes = [
 	{ path:'',component:WorkersComponent },
-	{ path:'about',component:WorkerComponent },
+	{ path:'blog',component:WorkerComponent },
 ];
 
 @NgModule({

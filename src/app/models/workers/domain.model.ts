@@ -23,7 +23,7 @@ export class Gender {
 	_list: string[];
 
 	constructor( id: any ) { 
-		this._list = ['Male','Female'];
+		this._list = ['Female','Male'];
 		this._value = this._list[parseInt(id)];
 	}
 

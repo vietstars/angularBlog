@@ -1,29 +1,3 @@
-.container 
-	padding-right: 0.75rem
-	padding-left: 0.75rem
-	margin-right: auto
-	margin-left: auto
-	width: 100%
-
-@media (min-width: 576px)
-	.container 
-		max-width: 540px
-
-@media (min-width: 768px)
-	.container
-		max-width: 720px
-
-@media (min-width: 992px)
-	.container
-		max-width: 960px
-
-@media (min-width: 1200px)
-	.container
-		max-width: 1140px
-
-.mt-3 
-	margin-top: 1.5em
-
 table
 	width: 100%
 	box-shadow:	0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12)
@@ -32,48 +6,67 @@ table
 		font-size: 120%
 	.cursor-pointer
 		cursor: pointer
-	tr
-	&.bg-warning
-		background-color: rgba(#f6e384,50%)
-		background-image: linear-gradient(to right, rgba(#f6e384,50%), #ffd500)
+		
+th.mat-header-cell:first-of-type, 
+td.mat-cell:first-of-type, 
+td.mat-footer-cell:first-of-type
+	padding-right: 12px
+
+.bg-gradient-warning
+	background-color: rgba(#f6e384,50%)
+	background-image: linear-gradient(to right, rgba(#f6e384,50%), #ffd500)
+
+button:focus.none-outline
+	outline: none!important
 
 .mat-form-field
 	margin-right: 12px
 	&.full-width
 		width: calc(100% - (200px * 3))
+	&.width-100
+		width: 100%
 
 .paginator-footer
 	margin-top: 30px
-	.paginator-event
-		display: inline-block
-		margin-top: 13px
 	.mat-paginator
 		display: inline-block
 		float: right
 
-tr.example-detail-row
+.new-worker
+	display: none
+	&.active
+		display: table-row
+
+mat-row, 
+mat-header-row, 
+mat-footer-row, 
+th.mat-header-cell, 
+td.mat-cell, 
+td.mat-footer-cell
+	border-bottom-color: #dee2e6
+tr.detail-row
 	height: 0
-tr.example-element-row:not(.example-expanded-row):hover
+tr.element-row:not(.expanded-row):hover
 	background: whitesmoke
-tr.example-element-row:not(.example-expanded-row):active
+tr.element-row:not(.expanded-row):active
 	background: #efefef
-.example-element-row td
+.element-row td
 	border-bottom-width: 0
-.example-element-detail
+.element-detail
 	overflow: hidden
 	display: block!important
-.example-element-diagram
+.element-diagram
 	min-width: 80px
 	border: 2px solid black
 	padding: 8px
 	font-weight: lighter
 	margin: 8px 0
 	height: 104px
-.example-element-symbol
+.element-symbol
 	font-weight: bold
 	font-size: 40px
 	line-height: normal
-.example-element-description
+.element-description
 	padding: 16px
-.example-element-description-attribution
+.element-description-attribution
 	opacity: 0.5

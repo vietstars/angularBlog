@@ -7,6 +7,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { worker } from 'src/app/models/workers/workers.model';
 import { Gender, Department, Timestamp } from 'src/app/models/workers/domain.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import Swal from 'sweetalert2'
 
 export interface Dessert {
   id:number;
@@ -43,9 +44,25 @@ export class WorkersComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 25, 100];
   pageIndex = 0;
 
-  pageEvent: MatPaginator;
-
   sortedData: worker[];
+
+  colSpan: number;
+
+  departments =  new Department(false).getList();
+
+  genders =  new Gender(false).getList();
+
+  newWorker = {
+		name : '',
+		subname : '',
+		email : '',
+		mobile : '',
+		gender : '',
+		department : '',
+		hire_at : ''
+  };
+
+  newWorkerActive: string = '';
 
   sort = {
   	'email': '',
@@ -64,6 +81,7 @@ export class WorkersComponent implements OnInit {
   	workersService.getWorkers(this.sort,this.filter,this.length,this.pageSize,this.pageIndex).subscribe(res=>{
   		let except: string[] = ['subname','update_at','update_by','status','detail','blog_title','blog_content'];
   		this.displayedColumns = Object.keys(res['data'][0]).filter(i=>!except.includes(i));
+  		this.colSpan = this.displayedColumns.length;
   		this.length = res['total'];
   		this.getSortData(res['data']);
   	})
@@ -73,16 +91,75 @@ export class WorkersComponent implements OnInit {
 		const setPageSizeOptionsInput = document.getElementsByClassName("mat-table-data")[0];
   	this.pageSizeOptions = setPageSizeOptionsInput.getAttribute('pageSizeOptions').split(',').map(str => +str);
   	this.length = parseInt(setPageSizeOptionsInput.getAttribute('totalCount'));
-  	this.pageSize = parseInt(setPageSizeOptionsInput.getAttribute('pageSize'));
+  	this.pageSize = parseInt(setPageSizeOptionsInput.getAttribute('pageSize'));  	
   }
 
-  isAllSelected() {
+  toggleClass(): string {
+  	return this.newWorkerActive = this.newWorkerActive!='active'?'active':'';
+  }
+
+  addWorker(): void {
+    let msg = '';
+    Object.keys(this.newWorker).forEach(i=>!this.newWorker[i]?(msg?msg+=', '+i:msg=i):null);
+    msg==''?'':msg += 'still empty!<br/>';
+  	Swal.fire({
+		  title: 'Are you sure?',
+		  html:`${msg}Do you want to create new worker with those details?`,
+		  icon: 'warning',
+		  showCancelButton: true,
+		  confirmButtonText: 'Yes, do it!',
+		  cancelButtonText: 'No, keep it'
+		}).then((result) => {
+		  if (result.value) {
+
+        this.workersService.addWorker(this.newWorker).subscribe(res=>{
+          if(res.insert)
+          {
+            Swal.fire(
+              'Success!',
+              'New worker has been created.',
+              'success'
+            )
+            this.workersService.getWorkers(this.sort,this.filter,0,this.pageSize,this.pageIndex).subscribe(res=>{
+              this.length = res['total'];
+              this.getSortData(res['data']);
+            })
+            this.toggleClass();
+          }else{
+            Swal.fire(
+              'Fails!',
+              'New worker hasn\'t been create. ',
+              'error'
+            )
+          }
+        })
+        this.newWorker = {
+          name : '',
+          subname : '',
+          email : '',
+          mobile : '',
+          gender : '',
+          department : '',
+          hire_at : ''
+        };
+        
+		  } else if (result.dismiss === Swal.DismissReason.cancel) {
+		    Swal.fire(
+		      'Cancelled',
+		      'Your detail is safe! ',
+		      'error'
+		    )
+		  }
+		})
+  }
+
+  isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.sortedData.length;
     return numSelected === numRows;
   }
 
-  masterToggle() {
+  masterToggle():void {
     this.isAllSelected() ?
         this.selection.clear() :
         this.sortedData.forEach(row => this.selection.select(row));
@@ -96,10 +173,10 @@ export class WorkersComponent implements OnInit {
   }
 
   setClass(row?: worker): string{
-  	if( row.status==1 )return 'bg-warning cursor-pointer';
+  	if( row.status==1 )return 'bg-gradient-warning cursor-pointer';
   }
 
-  changePageSize(event: Event){
+  changePageSize(event: Event):void{
   	this.pageSize = parseInt((event.target as HTMLInputElement).value);
   	this.workersService.getWorkers(this.sort,this.filter,this.length,this.pageSize,this.pageIndex).subscribe(res=>{
   		this.length = res['total'];
@@ -107,7 +184,7 @@ export class WorkersComponent implements OnInit {
   	})
   }
 
-  changeTotal(event: Event){
+  changeTotal(event: Event):void{
   	this.length = parseInt((event.target as HTMLInputElement).value);
   	this.workersService.getWorkers(this.sort,this.filter,this.length,this.pageSize,this.pageIndex).subscribe(res=>{
   		this.length = res['total'];
@@ -115,8 +192,7 @@ export class WorkersComponent implements OnInit {
   	})
   }
 
-  changePage(paginator: MatPaginator) {
-  	this.pageEvent = paginator;
+  changePage(paginator: MatPaginator):void {
   	this.pageIndex = paginator.pageIndex;
   	this.pageSize = paginator.pageSize;
 		this.workersService.getWorkers(this.sort,this.filter,this.length,this.pageSize,this.pageIndex).subscribe(res=>{
@@ -125,7 +201,7 @@ export class WorkersComponent implements OnInit {
   	})
   }
 
-  sortData(sort: MatSort) {
+  sortData(sort: MatSort):void {
 
   	this.sort[sort.active] = sort.direction;
   	this.workersService.getWorkers(this.sort,this.filter,this.length,this.pageSize,this.pageIndex).subscribe(res=>{
@@ -151,7 +227,7 @@ export class WorkersComponent implements OnInit {
     // });
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event):void {
     this.filter = (event.target as HTMLInputElement).value;
     // this.sortedData = this.sortedData.filter(i => (i.name+i.subname).toLowerCase().includes(filterValue.trim().toLowerCase()));
     this.workersService.getWorkers(this.sort,this.filter,this.length,this.pageSize,this.pageIndex).subscribe(res=>{
@@ -160,7 +236,7 @@ export class WorkersComponent implements OnInit {
   	})
   }
 
-  getSortData( data ) {
+  getSortData( data ):void {
 		this.sortedData = data.map(i=>{
 			i.gender 			= new Gender(i.gender).get();
 			i.department 	= new Department(i.department).get(); 
@@ -170,7 +246,7 @@ export class WorkersComponent implements OnInit {
 		});
   }
 
-  setPageSizeOptions(setPageSizeOptionsInput: string) {
+  setPageSizeOptions(setPageSizeOptionsInput: string):void {
     if (setPageSizeOptionsInput) {
       this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
     }
