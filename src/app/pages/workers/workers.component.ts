@@ -113,7 +113,7 @@ export class WorkersComponent implements OnInit {
 		  if (result.value) {
 
         this.workersService.addWorker(this.newWorker).subscribe(res=>{
-          if(res.insert)
+          if(res['insert'])
           {
             Swal.fire(
               'Success!',
