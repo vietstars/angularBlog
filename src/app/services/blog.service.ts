@@ -24,7 +24,7 @@ export class BlogService {
   	return this.http.post<blog[]>(this.baseUrl,{sort,filter,total,offset,page});
   }
 
-  getBlog(worker):Observable<blog> {
-    return this.http.post<blog>(`${this.baseUrl}`,{worker});
+  getBlog():Observable<blog> {
+    return this.http.get<blog>(`${this.baseUrl}`);
   }
 }

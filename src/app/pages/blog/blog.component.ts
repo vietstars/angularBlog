@@ -10,15 +10,13 @@ import marked from 'marked';
 })
 export class BlogComponent implements OnInit {
 
-
-  worker: number = 1583758268;
   blogItem: blog;
 
   constructor(private blogService: BlogService) { }
 
   ngOnInit(): void {
 
-  	this.blogService.getBlog(this.worker).subscribe(i=>this.blogItem = i);
+  	this.blogService.getBlog().subscribe(i=>this.blogItem = i);
   	
   }
 
