@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { WorkersService } from 'src/app/services/workers.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { worker } from 'src/app/models/workers/workers.model';
-import { Gender, Department, Timestamp } from 'src/app/models/workers/domain.model';
+import { Gender, Department, Timestamp } from 'src/app/models/domain.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import Swal from 'sweetalert2'
 

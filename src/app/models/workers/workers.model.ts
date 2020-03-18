@@ -1,4 +1,4 @@
-import { Gender, Department, Timestamp } from './domain.model';
+import { Gender, Department, Timestamp } from '../domain.model';
 
 export class worker {
 	id:number;
@@ -9,7 +9,7 @@ export class worker {
 	gender:string;
 	department:string;
 	hire_at:string;
-	update_at:Timestamp;
+	update_at:string;
 	update_by:string;
 	status:number;
 }

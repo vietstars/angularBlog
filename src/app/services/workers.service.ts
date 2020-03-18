@@ -14,16 +14,16 @@ const httpOptions = {
 })
 export class WorkersService {
 
-	baseUrl:string = 'http://dev.vn/api/'
+	baseUrl:string = 'http://dev.vn/api/worker'
 
   constructor(private http:HttpClient) { }
 
   //get todos
   getWorkers(sort,filter,total,offset,page):Observable<worker[]> {
-  	return this.http.post<worker[]>(`${this.baseUrl}workers`,{sort,filter,total,offset,page});
+  	return this.http.post<worker[]>(this.baseUrl,{sort,filter,total,offset,page});
   }
 
   addWorker(data):Observable<worker> {
-    return this.http.post<worker>(`${this.baseUrl}worker/add`,{data});
+    return this.http.post<worker>(`${this.baseUrl}/add`,{data});
   }
 }

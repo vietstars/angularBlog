@@ -1,6 +1,46 @@
 .mat-checkbox-layout{
 	margin-bottom: 0px;
 }
+.width-100 {
+	width: 100%;
+}
+.width-100 textarea{
+	min-height: 90px;
+	max-height: 300px;
+}
+		
+
+::-webkit-scrollbar {
+    width: 15px;
+    height: 15px; 
+}
+
+textarea::-webkit-scrollbar , 
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px; 
+}
+
+::-webkit-scrollbar-thumb, 
+textarea::-webkit-scrollbar-thumb, 
+.modal-body::-webkit-scrollbar-thumb {
+    background: #24394d;
+    border-radius: 0; 
+}
+
+::-webkit-scrollbar-thumb:hover, 
+textarea::-webkit-scrollbar-thumb:hover, 
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: #047edf;
+    border-radius: 0; 
+}
+
+::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track {
+    background: #e2e1e5;
+    border-radius: 0; 
+}
 /*!
  * Bootstrap v4.0.0 (https://getbootstrap.com)
  * Copyright 2011-2018 The Bootstrap Authors

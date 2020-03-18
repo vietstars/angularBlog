@@ -1,12 +1,17 @@
-<div class="container">
-<div class="card width-100 mt-3">
-  <img src="assets/img/main/img_1.jpg" class="card-img-top" alt="...">
-  <h1 class="card-title p-3">Card title</h1>
-  <h4 class="card-subtitle mb-2 text-muted px-3">Card subtitle</h4>
-  <div class="card-body">
-    <p class="card-text">
-	    Some quick example text to build on the card title and make up the bulk of the card's content.
-	</p>
-  </div>
-</div>
+<div class="container mb-5">
+	<div class="card width-100 mt-3">
+	  <img src="assets/img/blog/1583758268/thumb_1583758268.jpg" class="card-img-top" alt="...">
+	  <h1 class="card-title p-3">{{ blogItem.title }}</h1>
+	  <h4 class="card-subtitle mb-2 text-muted px-3">{{ blogItem.title }} subtitle</h4>
+	  <div class="card-body">  
+	    <div class="card-text" [innerHTML]="getMarkDown(blogItem.content)"></div>
+	  </div>
+	  <div class="card-body border-top border-bottom">
+	  	<h1>Edit blog content</h1>  
+	    <mat-form-field class="width-100">
+		    <mat-label>MarkDown code</mat-label>
+		    <textarea matInput placeholder="Enter markdown code" rows="18" [(ngModel)]="blogItem.content"></textarea>
+	  	</mat-form-field>
+	  </div>
+	</div>
 </div>
