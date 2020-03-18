@@ -4,7 +4,7 @@
 	  <h1 class="card-title p-3">{{ blogItem.title }}</h1>
 	  <h4 class="card-subtitle mb-2 text-muted px-3">{{ blogItem.title }} subtitle</h4>
 	  <div class="card-body">  
-	    <div class="card-text" [innerHTML]="getMarkDown(blogItem.content)"></div>
+	    <div class="card-text" [innerHTML]="getMarkDown()"></div>
 	  </div>
 	  <div class="card-body border-top border-bottom">
 	  	<h1>Edit blog content</h1>  
